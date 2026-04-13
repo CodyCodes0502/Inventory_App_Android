@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">CS-360_Project</string>
+    <string name="username">Username:</string>
+    <string name="enter_username_here">Enter Username Here</string>
+    <string name="password">Password:</string>
+    <string name="create_new_user">Create New User</string>
+    <string name="log_in">Log In</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="enter_your_username_and_password_to_log_in">Enter your username and password to log in.</string>
+    <string name="if_you_don_t_have_an_account_create_a_username_and_password_then_hit_create_new_user">If you don\'t have an account, create a username and password, then hit Create New User</string>
+    <string name="add">Add</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="add_inventory">Add new inventory</string>
+    <string name="inventory">New Inventory?</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_item">Add new item</string>
+    <string name="item">New Item?</string>
+    <string name="item_quantity">Quantity: %d</string>
+    <string name="alerts">Alerts</string>
+</resources>

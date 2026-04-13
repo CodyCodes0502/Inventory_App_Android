@@ -1,0 +1,23 @@
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Inventory_Activity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/item_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_item_button"
+        android:contentDescription="@string/add_item"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/add"
+        android:layout_margin="16dp"/>
+
+</FrameLayout>
