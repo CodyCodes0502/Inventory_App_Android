@@ -18,5 +18,9 @@
     <string name="add_item">Add new item</string>
     <string name="item">New Item?</string>
     <string name="item_quantity">Quantity: %d</string>
-    <string name="alerts">Alerts</string>
+    <string name="item_name">Item Name: %s</string>
+    <string name="item_created">Created: %d</string>
+    <string name="item_updated">Updated: %d</string>
+    <string name="alerts">Enable SMS Alerts</string>
+
 </resources>

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "UserManger.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
 
     // Users table
     public static final String TABLE_USERS = "users";
@@ -28,6 +28,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ITEM_NAME = "name";
     public static final String COLUMN_ITEM_QUANTITY = "quantity";
     public static final String COLUMN_ITEM_INV_ID = "inventory_id";
+    public static final String COLUMN_ITEM_CREATED = "created_time";
+    public static final String COLUMN_ITEM_UPDATED = "updated_time";
+
 
     private static DatabaseHelper mInstance;
 
@@ -63,6 +66,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_ITEM_NAME + " TEXT, " +
                 COLUMN_ITEM_QUANTITY + " INTEGER, " +
                 COLUMN_ITEM_INV_ID + " INTEGER, " +
+                COLUMN_ITEM_CREATED + " INTEGER, " +
+                COLUMN_ITEM_UPDATED + " INTEGER, " +
                 "FOREIGN KEY(" + COLUMN_ITEM_INV_ID + ") REFERENCES " +
                 TABLE_INVENTORIES + "(" + COLUMN_INV_ID + "))");
     }

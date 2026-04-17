@@ -65,6 +65,13 @@ public class Items_Activity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUI(mItemListViewModel.getItemList(getIntent().getLongExtra(EXTRA_INVENTORY_ID, 0)));
+    }
+
+
     private void updateUI(List<Item> itemList) {
         if (itemList == null) {
             itemList = new java.util.ArrayList<>();
@@ -160,6 +167,12 @@ public class Items_Activity extends AppCompatActivity
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(Items_Activity.this, ItemDetailsActivity.class);
+            intent.putExtra(ItemDetailsActivity.EXTRA_ITEM_ID, mItem.getId());
+            intent.putExtra(ItemDetailsActivity.EXTRA_ITEM_NAME, mItem.getName());
+            intent.putExtra(ItemDetailsActivity.EXTRA_ITEM_QUANTITY, mItem.getQuantity());
+            intent.putExtra(ItemDetailsActivity.EXTRA_ITEM_CREATED, mItem.getCreatedTime());
+            intent.putExtra(ItemDetailsActivity.EXTRA_ITEM_UPDATED, mItem.getUpdateTime());
+
 
             startActivity(intent);
         }

@@ -21,6 +21,13 @@ public class ItemListViewModel {
     public void addItem(Item item) {
         invRepo.addItem(item);
     }
+    public void deleteItem(long itemId) {
+        invRepo.deleteItem(itemId);
+    }
+
+    public void updateItem(Item item) {
+        invRepo.updateItem(item);
+    }
 
 
 }

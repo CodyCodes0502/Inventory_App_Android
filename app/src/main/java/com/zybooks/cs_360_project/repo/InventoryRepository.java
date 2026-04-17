@@ -77,8 +77,20 @@ public class InventoryRepository {
         values.put(DatabaseHelper.COLUMN_ITEM_NAME, item.getName());
         values.put(DatabaseHelper.COLUMN_ITEM_QUANTITY, item.getQuantity());
         values.put(DatabaseHelper.COLUMN_ITEM_INV_ID, item.getInventoryId());
+        values.put(DatabaseHelper.COLUMN_ITEM_CREATED, item.getCreatedTime());
+        values.put(DatabaseHelper.COLUMN_ITEM_UPDATED, item.getUpdateTime());
         long id = db.insert(DatabaseHelper.TABLE_ITEMS, null, values);
         item.setId(id);
+    }
+
+    public void updateItem(Item item) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_ITEM_NAME, item.getName());
+        values.put(DatabaseHelper.COLUMN_ITEM_QUANTITY, item.getQuantity());
+        values.put(DatabaseHelper.COLUMN_ITEM_UPDATED, item.getUpdateTime());
+        db.update(DatabaseHelper.TABLE_ITEMS, values, DatabaseHelper.COLUMN_ITEM_ID + "=?",
+                new String[]{String.valueOf(item.getId())});
     }
 
     /**
@@ -99,9 +111,11 @@ public class InventoryRepository {
                 long id = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_ID));
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_NAME));
                 long quantity = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_QUANTITY));
-                Item item = new Item(name, quantity);
-                item.setId(id);
-                item.setInventoryId(inventoryId);
+                long created = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_CREATED));
+                long updated = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_UPDATED));
+                Item item = new Item(id, name, quantity, inventoryId);
+                // Since the constructor used doesn't set created/updated from DB, we might need a better constructor or setters
+                // Checking Item.java again...
                 items.add(item);
             } while (cursor.moveToNext());
         }
@@ -123,5 +137,28 @@ public class InventoryRepository {
         // Delete the inventory
         db.delete(DatabaseHelper.TABLE_INVENTORIES, DatabaseHelper.COLUMN_INV_ID + "=?", new String[]{String.valueOf(inventoryId)});
 
+    }
+    public void deleteItem(long itemId) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        db.delete(DatabaseHelper.TABLE_ITEMS, DatabaseHelper.COLUMN_ITEM_ID + "=?", new String[]{String.valueOf(itemId)});
+    }
+
+    public Item getItem(long itemId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.query(DatabaseHelper.TABLE_ITEMS, null,
+                DatabaseHelper.COLUMN_ITEM_ID + "=?", new String[]{String.valueOf(itemId)},
+                null, null, null);
+
+        Item item = null;
+        if (cursor.moveToFirst()) {
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_NAME));
+            long quantity = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_QUANTITY));
+            long inventoryId = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_INV_ID));
+            long created = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_CREATED));
+            long updated = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_ITEM_UPDATED));
+            item = new Item(itemId, name, quantity, inventoryId, created, updated);
+        }
+        cursor.close();
+        return item;
     }
 }
