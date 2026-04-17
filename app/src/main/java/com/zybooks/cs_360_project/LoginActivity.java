@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,26 +13,60 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.zybooks.cs_360_project.model.Login;
+
 public class LoginActivity extends AppCompatActivity {
+
+    private Login login;
+    private EditText userNameEditText, passwordEditText;
+    private Button loginButton, newUserButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
 
+        Login db = new Login(this);
 
+        userNameEditText = findViewById(R.id.userNameEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        loginButton = findViewById(R.id.loginButton);
+        newUserButton = findViewById(R.id.newUserButton);
+
+        newUserButton.setOnClickListener(v -> {
+            // Handle new user button click
+
+            String username = userNameEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
+
+            if (username.isEmpty() || password.isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Please enter username and password", Toast.LENGTH_SHORT).show();
+            }
+            else if (db.checkUsername(username)) {
+            Toast.makeText(LoginActivity.this, "Username already exists", Toast.LENGTH_SHORT).show();
+            } else {
+                boolean updated = db.addUser(username, password);
+                if (updated) {
+                    Toast.makeText(LoginActivity.this, "User added successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Failed to add user", Toast.LENGTH_SHORT).show();
+                }
+        }
         });
-        Button loginButton = findViewById(R.id.loginButton);
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle login button click
+        loginButton.setOnClickListener(v -> {
+            // Handle login button click
+            String username = userNameEditText.getText().toString().trim();
+            String password = passwordEditText.getText().toString().trim();
+
+            boolean isValid = db.checkUser(username, password);
+
+            if (!isValid) {
+                Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+
                 startActivity(new Intent(LoginActivity.this, Inventory_Activity.class));
             }
         });
