@@ -1,4 +1,4 @@
-package com.zybooks.cs_360_project;
+package com.zybooks.cs_360_project.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,17 +11,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.zybooks.cs_360_project.ItemDialogFragment;
+import com.zybooks.cs_360_project.R;
 import com.zybooks.cs_360_project.model.Inventory;
 import com.zybooks.cs_360_project.model.Item;
+import com.zybooks.cs_360_project.viewmodel.InventoryListViewModel;
 import com.zybooks.cs_360_project.viewmodel.ItemListViewModel;
 
 import java.util.List;
@@ -33,6 +32,7 @@ public class Items_Activity extends AppCompatActivity
     public static final String EXTRA_INVENTORY_NAME = "com.zybooks.cs_360_project.inventory_name";
 
     private ItemListViewModel mItemListViewModel;
+    private InventoryListViewModel mInventoryListViewModel;
     private Inventory mInventory;
     private List<Item> mItemList;
     private int[] mItemColors;
@@ -46,6 +46,7 @@ public class Items_Activity extends AppCompatActivity
         setContentView(R.layout.activity_items);
 
         mItemListViewModel = new ItemListViewModel(getApplication());
+        mInventoryListViewModel = new InventoryListViewModel(getApplication());
 
         String inventoryName = getIntent().getStringExtra(EXTRA_INVENTORY_NAME);
         if (inventoryName != null) {
@@ -90,6 +91,10 @@ public class Items_Activity extends AppCompatActivity
             startActivity(intent);
             return true;
         }
+        else if (item.getItemId() == R.id.delete) {
+            deleteInventoryClick();
+            return true;
+        }
         else {
             return super.onOptionsItemSelected(item);
         }
@@ -121,6 +126,11 @@ public class Items_Activity extends AppCompatActivity
     private void addItemClick() {
         ItemDialogFragment dialog = new ItemDialogFragment();
         dialog.show(getSupportFragmentManager(), "ItemDialog");
+    }
+    private void deleteInventoryClick() {
+        long inventoryId = getIntent().getLongExtra(EXTRA_INVENTORY_ID, 0);
+        mInventoryListViewModel.deleteInventory(inventoryId);
+        finish();
     }
 
     private class ItemHolder extends RecyclerView.ViewHolder

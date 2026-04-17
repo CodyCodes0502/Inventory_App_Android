@@ -18,22 +18,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS360_Project">
         <activity
-            android:name=".AlertsActivity"
-            android:parentActivityName=".Items_Activity"
+            android:name=".view.AlertsActivity"
+            android:parentActivityName=".view.Items_Activity"
             android:exported="false" />
         <activity
-            android:name=".ItemDetailsActivity"
+            android:name=".view.ItemDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".Items_Activity"
+            android:name=".view.Items_Activity"
             android:exported="false"
             android:launchMode="singleTop"
-            android:parentActivityName=".Inventory_Activity" />
+            android:parentActivityName=".view.Inventory_Activity" />
         <activity
-            android:name=".Inventory_Activity"
+            android:name=".view.Inventory_Activity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

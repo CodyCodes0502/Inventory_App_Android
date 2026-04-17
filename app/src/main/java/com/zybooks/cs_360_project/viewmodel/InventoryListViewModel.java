@@ -21,4 +21,8 @@ public class InventoryListViewModel {
     public void addInventory(Inventory inventory) {
         invRepo.addInventory(inventory);
     }
+
+    public void deleteInventory(long inventoryId) {
+        invRepo.deleteInventory(inventoryId);
+    }
 }

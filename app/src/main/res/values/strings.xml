@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CS-360_Project</string>
+    <string name="app_name">Inventory Logger</string>
     <string name="username">Username:</string>
     <string name="enter_username_here">Enter Username Here</string>
     <string name="password">Password:</string>

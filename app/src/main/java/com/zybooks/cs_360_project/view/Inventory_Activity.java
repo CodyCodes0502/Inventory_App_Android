@@ -1,4 +1,4 @@
-package com.zybooks.cs_360_project;
+package com.zybooks.cs_360_project.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.zybooks.cs_360_project.InventoryDialogFragment;
+import com.zybooks.cs_360_project.R;
 import com.zybooks.cs_360_project.model.Inventory;
 import com.zybooks.cs_360_project.viewmodel.InventoryListViewModel;
 
@@ -44,9 +46,17 @@ public class Inventory_Activity extends AppCompatActivity
 
         updateUI(mInventoryListViewModel.getInventoryList());
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUI(mInventoryListViewModel.getInventoryList());
+    }
+
     private void updateUI(List<Inventory> inventoryList) {
         mInventoryAdapter = new InventoryAdapter(inventoryList);
         mRecyclerView.setAdapter(mInventoryAdapter);
+        setTitle(R.string.app_name);
     }
 
     @Override

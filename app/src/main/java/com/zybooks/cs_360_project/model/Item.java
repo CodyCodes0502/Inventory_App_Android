@@ -11,6 +11,14 @@ public class Item {
         this.quantity = quantity;
     }
 
+    public Item(long id, String name, long quantity, long inventoryId) {
+
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.inventoryId = inventoryId;
+    }
+
 
     public void setId(long id) {
         this.id = id;

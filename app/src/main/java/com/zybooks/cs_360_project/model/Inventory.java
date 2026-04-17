@@ -5,11 +5,20 @@ import androidx.annotation.NonNull;
 public class Inventory {
     private long id;
     private String name;
+    private long createdTime;
     private long updateTime;
 
     public Inventory(@NonNull String name) {
         this.name = name;
-        updateTime = System.currentTimeMillis();
+        this.updateTime = System.currentTimeMillis();
+        this.createdTime = System.currentTimeMillis();
+    }
+
+    public Inventory(long id, String name, long createdTime, long updateTime) {
+        this.id = id;
+        this.name = name;
+        this.createdTime = createdTime;
+        this.updateTime = updateTime;
     }
 
     public long getId() {
@@ -28,6 +37,15 @@ public class Inventory {
         this.name = name;
         updateTime = System.currentTimeMillis();
     }
+
+    public long getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(long createdTime) {
+        this.createdTime = createdTime;
+    }
+
 
     public long getUpdateTime() {
         return updateTime;
