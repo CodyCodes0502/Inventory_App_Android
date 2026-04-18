@@ -15,6 +15,12 @@ public class Login {
     public Login(Context context) {
         dbHelper =  DatabaseHelper.getInstance(context);
     }
+    /**
+     * Adds a new user to the database
+     * @param username
+     * @param password
+     * @return
+     */
     public boolean addUser(String username, String password) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -25,6 +31,12 @@ public class Login {
         return result != -1;
     }
 
+    /**
+     * Checks if a username and password match in the database
+     * @param username
+     * @param password
+     * @return
+     */
     public boolean checkUser(String username, String password) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_USERS + " WHERE " +
@@ -37,6 +49,12 @@ public class Login {
         return result;
     }
 
+
+    /**
+     * Checks if a username already exists in the database
+     * @param username
+     * @return
+     */
     public boolean checkUsername(String username) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_USERS + " WHERE " +

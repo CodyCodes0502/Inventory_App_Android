@@ -16,6 +16,9 @@ import com.zybooks.cs_360_project.model.Item;
 import com.zybooks.cs_360_project.view.Items_Activity;
 import com.zybooks.cs_360_project.viewmodel.ItemListViewModel;
 
+/**
+ * This fragment is used to edit an item.
+ */
 
 public class ItemEditFragment extends DialogFragment {
 
@@ -38,6 +41,16 @@ public class ItemEditFragment extends DialogFragment {
         void onItemEdited();
     }
 
+    /**
+     * Create a new instance of the fragment.
+     * @param itemId - the ID of the item to edit.
+     * @param itemName - the name of the item to edit.
+     * @param itemQuantity - the quantity of the item to edit.
+     * @param itemInventoryId - the inventory ID of the item to edit.
+     * @param itemCreated - the created time of the item to edit.
+     * @param itemUpdated - the updated time of the item to edit.
+     * @return - a new instance of the fragment.
+     */
     public static ItemEditFragment newInstance(long itemId, String itemName, long itemQuantity, long itemInventoryId, long itemCreated, long itemUpdated) {
         ItemEditFragment fragment = new ItemEditFragment();
         Bundle args = new Bundle();
@@ -53,6 +66,18 @@ public class ItemEditFragment extends DialogFragment {
         return fragment;
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -92,6 +117,9 @@ public class ItemEditFragment extends DialogFragment {
         return view;
     }
 
+    /**
+     * Called when the fragment is visible to the user and actively running.
+     */
     @Override
     public void onStart(){
         super.onStart();
