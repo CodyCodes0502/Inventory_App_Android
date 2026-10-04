@@ -1,7 +1,9 @@
 package com.zybooks.cs_360_project.view;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,9 +15,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner;
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning;
 import com.zybooks.cs_360_project.ItemDialogFragment;
 import com.zybooks.cs_360_project.R;
 import com.zybooks.cs_360_project.model.Inventory;
@@ -55,7 +60,28 @@ public class Items_Activity extends AppCompatActivity
 
         mItemColors = getResources().getIntArray(R.array.InventoryColors);
 
-        findViewById(R.id.add_item_button).setOnClickListener(view -> addItemClick());
+        View manualButton = findViewById(R.id.add_manually_button);
+        View barcodeButton = findViewById(R.id.open_barcode_scanner);
+
+        findViewById(R.id.add_item_button).setOnClickListener(view -> {
+            int visibility = manualButton.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+
+            manualButton.setVisibility(visibility);
+            barcodeButton.setVisibility(visibility);
+        });
+
+        manualButton.setOnClickListener(view -> {
+            manualButton.setVisibility(View.GONE);
+            barcodeButton.setVisibility(View.GONE);
+            addItemClick();
+        });
+
+        barcodeButton.setOnClickListener(view -> {
+            manualButton.setVisibility(View.GONE);
+            barcodeButton.setVisibility(View.GONE);
+            openBarcodeScanner();
+
+                });
 
         mRecyclerView = findViewById(R.id.item_recycler_view);
         RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
@@ -63,6 +89,19 @@ public class Items_Activity extends AppCompatActivity
 
         updateUI(mItemListViewModel.getItemList(getIntent().getLongExtra(EXTRA_INVENTORY_ID, 0)));
 
+    }
+
+    private void openBarcodeScanner() {
+        /*if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 1);
+        }
+        else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivity(intent);
+        }*/
+
+        GmsBarcodeScanner scanner = GmsBarcodeScanning.getClient(this);
+        scanner.startScan();
     }
 
     @Override
