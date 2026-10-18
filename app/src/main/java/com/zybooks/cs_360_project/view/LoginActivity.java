@@ -56,14 +56,14 @@ public class LoginActivity extends AppCompatActivity {
             String username = userNameEditText.getText().toString().trim();
             String password = passwordEditText.getText().toString().trim();
 
-            boolean isValid = db.checkUser(username, password);
+            long userId = db.authenicateUser(username, password);
 
-            if (!isValid) {
+            if (userId == -1L) {
                 Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
-
-                startActivity(new Intent(LoginActivity.this, Inventory_Activity.class));
+                Intent intent = new Intent(LoginActivity.this, Inventory_Activity.class);
+                intent.putExtra(Inventory_Activity.EXTRA_USER_ID, userId);
+                startActivity(intent);
             }
         });
     }

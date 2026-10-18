@@ -28,6 +28,9 @@ public class Inventory_Activity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private int[] mInventoryColors;
     private InventoryListViewModel mInventoryListViewModel;
+    private long mUserId;
+    public static final String EXTRA_USER_ID = "com.zybooks.cs_360_project.user_id";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +47,21 @@ public class Inventory_Activity extends AppCompatActivity
         RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
-        updateUI(mInventoryListViewModel.getInventoryList());
+        mUserId = getIntent().getLongExtra(EXTRA_USER_ID, -1L);
+
+        updateUI(mInventoryListViewModel.getInventoryList(mUserId));
+
+        if (mUserId == -1L) {
+            finish();
+            return;
+        }
     }
 
     @Override
     protected void onResume() {
+        mUserId = getIntent().getLongExtra(EXTRA_USER_ID, -1L);
         super.onResume();
-        updateUI(mInventoryListViewModel.getInventoryList());
+        updateUI(mInventoryListViewModel.getInventoryList(mUserId));
     }
 
     private void updateUI(List<Inventory> inventoryList) {
@@ -62,9 +73,9 @@ public class Inventory_Activity extends AppCompatActivity
     @Override
     public void onInventoryEntered(String inventoryName) {
         if(!inventoryName.isEmpty()) {
-            Inventory inventory = new Inventory(inventoryName);
+            Inventory inventory = new Inventory(inventoryName, mUserId);
             mInventoryListViewModel.addInventory(inventory);
-            updateUI(mInventoryListViewModel.getInventoryList());
+            updateUI(mInventoryListViewModel.getInventoryList(mUserId));
 
             Toast.makeText(this, "Added " + inventoryName, Toast.LENGTH_SHORT).show();
         }
@@ -98,6 +109,7 @@ public class Inventory_Activity extends AppCompatActivity
         public void onClick(View view) {
             Intent intent = new Intent(Inventory_Activity.this, Items_Activity.class);
             intent.putExtra(Items_Activity.EXTRA_INVENTORY_ID, mInventory.getId());
+            intent.putExtra(Items_Activity.EXTRA_USER_ID, mUserId);
             intent.putExtra(Items_Activity.EXTRA_INVENTORY_NAME, mInventory.getName());
 
             startActivity(intent);

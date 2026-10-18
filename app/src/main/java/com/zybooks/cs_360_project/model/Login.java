@@ -49,6 +49,32 @@ public class Login {
         return result;
     }
 
+    public long authenicateUser(String username, String password) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        String[] columns = {DatabaseHelper.COLUMN_USER_ID};
+        String selection = DatabaseHelper.COLUMN_USERNAME + " = ? AND " + DatabaseHelper.COLUMN_PASSWORD + " = ?";
+        String[] selectionArgs = {username, password};
+
+        try (Cursor cursor = db.query(
+                DatabaseHelper.TABLE_USERS,
+                columns,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                null
+        )) {
+            if (cursor.moveToFirst()) {
+                return cursor.getLong(
+                        cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_USER_ID)
+                );
+            }
+        }
+
+        return -1;
+    }
+
 
     /**
      * Checks if a username already exists in the database

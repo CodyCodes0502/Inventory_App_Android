@@ -22,8 +22,8 @@ public class ItemListViewModel {
         mContext = application.getApplicationContext();
     }
 
-    public List<Item> getItemList(long inventoryId) {
-        return invRepo.getItemList(inventoryId);
+    public List<Item> getItemList(long inventoryId, long userId) {
+        return invRepo.getItemList(inventoryId, userId);
     }
 
     public void addItem(Item item) {
