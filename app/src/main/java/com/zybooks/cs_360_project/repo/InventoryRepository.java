@@ -30,16 +30,17 @@ public class InventoryRepository {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DatabaseHelper.COLUMN_INV_NAME, inventory.getName());
+        values.put(DatabaseHelper.COLUMN_USER_ID, inventory.getUserId());
         values.put(DatabaseHelper.COLUMN_INV_CREATED, inventory.getCreatedTime());
         values.put(DatabaseHelper.COLUMN_INV_UPDATED, inventory.getUpdateTime());
         long id = db.insert(DatabaseHelper.TABLE_INVENTORIES, null, values);
         inventory.setId(id);
     }
 
-    public List<Inventory> getInventoryList() {
+    public List<Inventory> getInventoryList(long userId) {
         List<Inventory> inventories = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_INVENTORIES, null, null, null, null, null, null);
+        Cursor cursor = db.query(DatabaseHelper.TABLE_INVENTORIES, null, DatabaseHelper.COLUMN_INV_USER_ID + "=?", new String[]{String.valueOf(userId)}, null, null, DatabaseHelper.COLUMN_INV_UPDATED + " DESC");
 
         if (cursor.moveToFirst()) {
             do {
@@ -47,25 +48,32 @@ public class InventoryRepository {
                 String name = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_INV_NAME));
                 long created = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_INV_CREATED));
                 long updated = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_INV_UPDATED));
-                inventories.add(new Inventory(id, name, created, updated));
+                inventories.add(new Inventory(id, name, userId, created, updated));
             } while (cursor.moveToNext());
         }
         cursor.close();
         return inventories;
     }
 
-    public Inventory getInventory(long id) {
+    public Inventory getInventory(long inventoryId, long userId) {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_INVENTORIES, null,
-                DatabaseHelper.COLUMN_INV_ID + "=?", new String[]{String.valueOf(id)},
-                null, null, null);
+        Cursor cursor = db.query(
+                DatabaseHelper.TABLE_INVENTORIES,
+                null,
+                DatabaseHelper.COLUMN_INV_ID + "=? AND " + DatabaseHelper.COLUMN_INV_USER_ID + "=?",
+                new String[]{
+                        String.valueOf(inventoryId),
+                        String.valueOf(userId)},
+                null,
+                null,
+                null);
 
         Inventory inventory = null;
         if (cursor.moveToFirst()) {
             String name = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_INV_NAME));
             long created = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_INV_CREATED));
             long updated = cursor.getLong(cursor.getColumnIndexOrThrow(DatabaseHelper.COLUMN_INV_UPDATED));
-            inventory = new Inventory(id, name, created, updated);
+            inventory = new Inventory(inventoryId, name, userId, created, updated);
         }
         cursor.close();
         return inventory;
@@ -99,7 +107,7 @@ public class InventoryRepository {
      * @return - a list of items associated with the inventory.
      */
 
-    public List<Item> getItemList(long inventoryId) {
+    public List<Item> getItemList(long inventoryId, long userId) {
         List<Item> items = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(DatabaseHelper.TABLE_ITEMS, null,
@@ -128,14 +136,14 @@ public class InventoryRepository {
      * @param inventoryId - the inventory ID to delete.
      */
 
-    public void deleteInventory(long inventoryId) {
+    public void deleteInventory(long inventoryId, long userId) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         // Delete items associated with the inventory
         db.delete(DatabaseHelper.TABLE_ITEMS, DatabaseHelper.COLUMN_ITEM_INV_ID + "=?", new String[]{String.valueOf(inventoryId)});
 
         // Delete the inventory
-        db.delete(DatabaseHelper.TABLE_INVENTORIES, DatabaseHelper.COLUMN_INV_ID + "=?", new String[]{String.valueOf(inventoryId)});
+        db.delete(DatabaseHelper.TABLE_INVENTORIES, DatabaseHelper.COLUMN_INV_ID + "=? AND " + DatabaseHelper.COLUMN_INV_USER_ID + "=?", new String[]{String.valueOf(inventoryId)});
 
     }
     public void deleteItem(long itemId) {

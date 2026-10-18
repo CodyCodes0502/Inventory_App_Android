@@ -14,15 +14,15 @@ public class InventoryListViewModel {
         invRepo = InventoryRepository.getInstance(application.getApplicationContext());
     }
 
-    public List<Inventory> getInventoryList() {
-        return invRepo.getInventoryList();
+    public List<Inventory> getInventoryList(long userId) {
+        return invRepo.getInventoryList(userId);
     }
 
     public void addInventory(Inventory inventory) {
         invRepo.addInventory(inventory);
     }
 
-    public void deleteInventory(long inventoryId) {
-        invRepo.deleteInventory(inventoryId);
+    public void deleteInventory(long inventoryId, long userId) {
+        invRepo.deleteInventory(inventoryId, userId);
     }
 }

@@ -35,6 +35,8 @@ public class Items_Activity extends AppCompatActivity
 
     public static final String EXTRA_INVENTORY_ID = "com.zybooks.cs_360_project.inventory_id";
     public static final String EXTRA_INVENTORY_NAME = "com.zybooks.cs_360_project.inventory_name";
+    public static final String EXTRA_USER_ID = "com.zybooks.cs_360_project.user_id";
+
 
     private ItemListViewModel mItemListViewModel;
     private InventoryListViewModel mInventoryListViewModel;
@@ -87,7 +89,7 @@ public class Items_Activity extends AppCompatActivity
         RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
-        updateUI(mItemListViewModel.getItemList(getIntent().getLongExtra(EXTRA_INVENTORY_ID, 0)));
+        updateUI(mItemListViewModel.getItemList(getIntent().getLongExtra(EXTRA_INVENTORY_ID, 0), getIntent().getLongExtra(EXTRA_USER_ID, 0)));
 
     }
 
@@ -107,7 +109,7 @@ public class Items_Activity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        updateUI(mItemListViewModel.getItemList(getIntent().getLongExtra(EXTRA_INVENTORY_ID, 0)));
+        updateUI(mItemListViewModel.getItemList(getIntent().getLongExtra(EXTRA_INVENTORY_ID, 0), getIntent().getLongExtra(EXTRA_USER_ID, 0)));
     }
 
 
@@ -163,7 +165,7 @@ public class Items_Activity extends AppCompatActivity
             item.setInventoryId(inventoryId);
             mItemListViewModel.addItem(item);
 
-            updateUI(mItemListViewModel.getItemList(inventoryId));
+            updateUI(mItemListViewModel.getItemList(inventoryId, getIntent().getLongExtra(EXTRA_USER_ID, 0)));
 
             Toast.makeText(this, "Added " + itemName, Toast.LENGTH_SHORT).show();
         }
@@ -175,7 +177,8 @@ public class Items_Activity extends AppCompatActivity
     }
     private void deleteInventoryClick() {
         long inventoryId = getIntent().getLongExtra(EXTRA_INVENTORY_ID, 0);
-        mInventoryListViewModel.deleteInventory(inventoryId);
+        long userId = getIntent().getLongExtra(EXTRA_USER_ID, 0);
+        mInventoryListViewModel.deleteInventory(inventoryId, userId);
         finish();
     }
 

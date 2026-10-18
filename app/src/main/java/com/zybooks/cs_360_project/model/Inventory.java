@@ -7,14 +7,17 @@ public class Inventory {
     private String name;
     private long createdTime;
     private long updateTime;
+    private long userId;
+
 
 
     /**
      * Create a new inventory with the given name.
      * @param name - the name of the inventory.
      */
-    public Inventory(@NonNull String name) {
+    public Inventory(@NonNull String name, long userId) {
         this.name = name;
+        this.userId = userId;
         this.updateTime = System.currentTimeMillis();
         this.createdTime = System.currentTimeMillis();
     }
@@ -27,7 +30,12 @@ public class Inventory {
      * @param updateTime - the last update time of the inventory.
      */
 
-    public Inventory(long id, String name, long createdTime, long updateTime) {
+    public Inventory(
+            long id,
+            String name,
+            long userId,
+            long createdTime,
+            long updateTime) {
         this.id = id;
         this.name = name;
         this.createdTime = createdTime;
@@ -41,6 +49,10 @@ public class Inventory {
 
     public long getId() {
         return id;
+    }
+
+    public long getUserId() {
+        return userId;
     }
 
     /**
